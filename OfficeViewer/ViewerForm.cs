@@ -32,13 +32,13 @@ namespace OfficeViewer
                 Filter = "Microsoft Office files|*.ODT;*.DOC;*.DOCM;*.DOCX;*.DOT;*.DOTM;*.DOTX;*.RTF;*.XLS;*.XLSB;*.XLSM;*.XLSX;*.XLT;" +
                          "*.XLTM;*.XLTX;*.XLW;*.POT;*.PPT;*.POTM;*.POTX;*.PPS;*.PPSM;*.PPSX;*.PPTM;*.PPTX",
                 FilterIndex = 1,
-                Multiselect = false
+                Multiselect = true
             };
 
             // Process input if the user clicked OK.
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                inputFilePathTextBox.Text = openFileDialog1.FileName;
+                inputFilePathTextBox.Text = string.Join("; ",openFileDialog1.FileNames);
                 // Open the selected file to read.
                 var folderBrowserDialog1 = new VistaFolderBrowserDialog()
                 {
@@ -48,27 +48,30 @@ namespace OfficeViewer
                 };
                 if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    try
+                    FilesListBox.Items.Clear();
+                    foreach(string file in openFileDialog1.FileNames)
                     {
-                        var extractor = new OfficeExtractor.Extractor();
-                        var files = extractor.Extract(openFileDialog1.FileName, folderBrowserDialog1.SelectedPath);
-                        FilesListBox.Items.Clear();
-
-                        if (files == null)
+                        try
                         {
+                            var extractor = new OfficeExtractor.Extractor();
+                            var oleFiles = extractor.Extract(file, folderBrowserDialog1.SelectedPath);
+
+                            if (oleFiles == null)
+                            {
                             outputFolderButton.Enabled = false;
                             return;
+                            }
+                            foreach (var oleFile in oleFiles)
+                                FilesListBox.Items.Add(Path.GetFileName(oleFile));
+                            _recentOutputPath = folderBrowserDialog1.SelectedPath;
                         }
-                        foreach (var file in files)
-                            FilesListBox.Items.Add(Path.GetFileName(file));
-                        _recentOutputPath = folderBrowserDialog1.SelectedPath;
-                        outputFolderButton.Enabled = true;
+                        catch (Exception ex)
+                        {
+                            outputFolderButton.Enabled = false;
+                            MessageBox.Show(ex.Message);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        outputFolderButton.Enabled = false;
-                        MessageBox.Show(ex.Message);
-                    }
+                    outputFolderButton.Enabled = true;
                 }
             }
         }
