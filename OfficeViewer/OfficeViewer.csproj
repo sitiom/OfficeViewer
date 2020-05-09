@@ -49,7 +49,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Reference Include="Guna.UI2">
-      <HintPath>..\..\..\..\Documents\Guna.UI-Framework-Lib\Guna.UI2 WinForms\.net 4.0\Guna.UI2.dll</HintPath>
+      <HintPath>..\lib\Guna\Guna.UI2.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Design" />
