@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeViewer", "OfficeViewer\OfficeViewer.csproj", "{D2AA5D37-C5D2-45BA-87A5-C52374DCF12B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2AA5D37-C5D2-45BA-87A5-C52374DCF12B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2AA5D37-C5D2-45BA-87A5-C52374DCF12B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2AA5D37-C5D2-45BA-87A5-C52374DCF12B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2AA5D37-C5D2-45BA-87A5-C52374DCF12B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4C38F9C-9302-4388-9E87-035914C38CE5}
+	EndGlobalSection
+EndGlobal
