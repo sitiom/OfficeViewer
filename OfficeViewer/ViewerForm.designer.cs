@@ -34,16 +34,20 @@
             this.inputFilePathTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.outputFolderButton = new Guna.UI2.WinForms.Guna2Button();
+            this.guna2ProgressBar1 = new Guna.UI2.WinForms.Guna2ProgressBar();
+            this.oleBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.folderBrowserDialog1 = new Ookii.Dialogs.WinForms.VistaFolderBrowserDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // FilesListBox
             // 
-            this.FilesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.FilesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FilesListBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FilesListBox.FormattingEnabled = true;
             this.FilesListBox.ItemHeight = 25;
-            this.FilesListBox.Location = new System.Drawing.Point(11, 81);
+            this.FilesListBox.Location = new System.Drawing.Point(11, 89);
             this.FilesListBox.Margin = new System.Windows.Forms.Padding(2);
             this.FilesListBox.Name = "FilesListBox";
             this.FilesListBox.Size = new System.Drawing.Size(516, 304);
@@ -98,7 +102,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 54);
+            this.label2.Location = new System.Drawing.Point(11, 57);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(124, 25);
@@ -107,6 +111,7 @@
             // 
             // outputFolderButton
             // 
+            this.outputFolderButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.outputFolderButton.Animated = true;
             this.outputFolderButton.AutoRoundedCorners = true;
             this.outputFolderButton.BorderRadius = 19;
@@ -117,7 +122,7 @@
             this.outputFolderButton.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.outputFolderButton.ForeColor = System.Drawing.Color.White;
             this.outputFolderButton.HoverState.Parent = this.outputFolderButton;
-            this.outputFolderButton.Location = new System.Drawing.Point(346, 392);
+            this.outputFolderButton.Location = new System.Drawing.Point(346, 400);
             this.outputFolderButton.Name = "outputFolderButton";
             this.outputFolderButton.ShadowDecoration.Parent = this.outputFolderButton;
             this.outputFolderButton.Size = new System.Drawing.Size(180, 41);
@@ -125,11 +130,43 @@
             this.outputFolderButton.Text = "Go to Output";
             this.outputFolderButton.Click += new System.EventHandler(this.outputFolderButton_Click);
             // 
+            // guna2ProgressBar1
+            // 
+            this.guna2ProgressBar1.AutoRoundedCorners = true;
+            this.guna2ProgressBar1.BorderRadius = 14;
+            this.guna2ProgressBar1.GradientMode = System.Drawing.Drawing2D.LinearGradientMode.Horizontal;
+            this.guna2ProgressBar1.Location = new System.Drawing.Point(12, 405);
+            this.guna2ProgressBar1.Name = "guna2ProgressBar1";
+            this.guna2ProgressBar1.ShadowDecoration.Parent = this.guna2ProgressBar1;
+            this.guna2ProgressBar1.Size = new System.Drawing.Size(328, 30);
+            this.guna2ProgressBar1.TabIndex = 0;
+            this.guna2ProgressBar1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+            // 
+            // oleBackgroundWorker
+            // 
+            this.oleBackgroundWorker.WorkerReportsProgress = true;
+            this.oleBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.oleBackgroundWorker_DoWork);
+            this.oleBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.oleBackgroundWorker_ProgressChanged);
+            // 
+            // folderBrowserDialog1
+            // 
+            this.folderBrowserDialog1.Description = "Select output folder";
+            this.folderBrowserDialog1.UseDescriptionForTitle = true;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Microsoft Office files|*.ODT;*.DOC;*.DOCM;*.DOCX;*.DOT;*.DOTM;*.DOTX;*.RTF;*.XLS;" +
+    "*.XLSB;*.XLSM;*.XLSX;*.XLT;*.XLTM;*.XLTX;*.XLW;*.POT;*.PPT;*.POTM;*.POTX;*.PPS;*" +
+    ".PPSM;*.PPSX;*.PPTM;*.PPTX";
+            this.openFileDialog1.Multiselect = true;
+            // 
             // ViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 440);
+            this.ClientSize = new System.Drawing.Size(538, 448);
+            this.Controls.Add(this.guna2ProgressBar1);
             this.Controls.Add(this.outputFolderButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.inputFilePathTextBox);
@@ -153,6 +190,10 @@
         private Guna.UI2.WinForms.Guna2TextBox inputFilePathTextBox;
         private System.Windows.Forms.Label label2;
         private Guna.UI2.WinForms.Guna2Button outputFolderButton;
+        private Guna.UI2.WinForms.Guna2ProgressBar guna2ProgressBar1;
+        private System.ComponentModel.BackgroundWorker oleBackgroundWorker;
+        private Ookii.Dialogs.WinForms.VistaFolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
