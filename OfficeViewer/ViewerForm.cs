@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -78,6 +79,10 @@ namespace OfficeViewer
                         }
                     }
                     _recentOutputPath = folderBrowserDialog1.SelectedPath;
+                    if(!Directory.EnumerateFileSystemEntries(outputFileDirectory).Any())
+                    {
+                        Directory.Delete(outputFileDirectory);
+                    }
                 }
                 catch (Exception ex)
                 {
