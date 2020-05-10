@@ -20,7 +20,7 @@ namespace OfficeViewer
         private void ViewerForm_Load(object sender, EventArgs e)
         {
             // ReSharper disable once LocalizableElement
-            Text = $"Office Extractor v{Assembly.GetExecutingAssembly().GetName().Version}";
+            Text = $"Office Viewer {Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
         private void inputFilePathTextBox_IconRightClick(object sender, EventArgs e)
@@ -29,6 +29,11 @@ namespace OfficeViewer
             {
                 if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
+                    inputFilePathTextBox.Text = string.Join("; ", openFileDialog1.FileNames);
+                    filesListBox.Items.Clear();
+                    outputFolderButton.Enabled = false;
+                    inputFilePathTextBox.Enabled = false;
+                    guna2ProgressBar1.Value = 0;
                     oleBackgroundWorker.RunWorkerAsync();
                 }
             }
@@ -39,17 +44,14 @@ namespace OfficeViewer
             Process.Start(_recentOutputPath);
         }
 
+        #region oleBackgroundWorker
         private void oleBackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            inputFilePathTextBox.Text = string.Join("; ", openFileDialog1.FileNames);
-            FilesListBox.Items.Clear();
-            outputFolderButton.Enabled = false;
-            inputFilePathTextBox.Enabled = false;
             for (int i = 0; i < openFileDialog1.FileNames.Length; i++)
             {
-                string file = openFileDialog1.FileNames[i];
                 try
                 {
+                    string file = openFileDialog1.FileNames[i];
                     string outputFileDirectory = Path.Combine(folderBrowserDialog1.SelectedPath,
                         Path.GetFileNameWithoutExtension(file));
                     if (!Directory.Exists(outputFileDirectory))
@@ -59,24 +61,22 @@ namespace OfficeViewer
 
                     var extractor = new OfficeExtractor.Extractor();
                     var oleFiles = extractor.Extract(file, outputFileDirectory);
-
-                    if (oleFiles == null) return;
-                    FilesListBox.Items.Add(Path.GetFileName(file));
+                    filesListBox.Items.Add(Path.GetFileName(file));
                     for (int j = 1; j <= oleFiles.Count; j++)
                     {
                         if (j != oleFiles.Count)
                         {
-                            FilesListBox.Items.Add("├───" + Path.GetFileName(oleFiles[j - 1]));
-                            oleBackgroundWorker.ReportProgress((i + j / oleFiles.Count) / openFileDialog1.FileNames.Length * 100);
+                            oleBackgroundWorker.ReportProgress(
+                                (int)((i + ((decimal)j / oleFiles.Count)) / openFileDialog1.FileNames.Length * 100),
+                                "├───" + Path.GetFileName(oleFiles[j - 1]));
                         }
                         else
                         {
-                            FilesListBox.Items.Add("└───" + Path.GetFileName(oleFiles[j - 1]));
-                            oleBackgroundWorker.ReportProgress((i + j / oleFiles.Count) / openFileDialog1.FileNames.Length * 100);
+                            oleBackgroundWorker.ReportProgress(
+                                (int)((i + ((decimal)j / oleFiles.Count)) / openFileDialog1.FileNames.Length * 100),
+                                "└───" + Path.GetFileName(oleFiles[j - 1]));
                         }
                     }
-
-                    FilesListBox.Items.Add(string.Empty);
                     _recentOutputPath = folderBrowserDialog1.SelectedPath;
                 }
                 catch (Exception ex)
@@ -84,14 +84,24 @@ namespace OfficeViewer
                     MessageBox.Show(ex.Message);
                 }
             }
-
-            inputFilePathTextBox.Enabled = true;
-            outputFolderButton.Enabled = FilesListBox.Items.Count != 0;
         }
 
         private void oleBackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
+            string oleFile = (string)e.UserState;
+            filesListBox.Items.Add(oleFile);
+            filesListBox.TopIndex = filesListBox.Items.Count - 1;
+            if (oleFile[0] == '└')
+                filesListBox.Items.Add(string.Empty);
             guna2ProgressBar1.Value = e.ProgressPercentage;
         }
+
+        private void oleBackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            inputFilePathTextBox.Enabled = true;
+            outputFolderButton.Enabled = filesListBox.Items.Count != 0;
+            guna2ProgressBar1.Value = 100;
+        }
+        #endregion
     }
 }
