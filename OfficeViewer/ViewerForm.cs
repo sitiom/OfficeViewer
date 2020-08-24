@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using Ookii.Dialogs.WinForms;
 
 
 namespace OfficeViewer
@@ -21,7 +19,7 @@ namespace OfficeViewer
         private void ViewerForm_Load(object sender, EventArgs e)
         {
             // ReSharper disable once LocalizableElement
-            Text = $"Office Viewer {Assembly.GetExecutingAssembly().GetName().Version}";
+            Text = $"Office Viewer {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
         }
 
         private void inputFilePathTextBox_IconRightClick(object sender, EventArgs e)

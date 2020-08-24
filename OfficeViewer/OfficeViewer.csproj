@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Guna.UI2.WinForms" Version="2.0.0.8" />
     <PackageReference Include="OfficeExtractor" Version="1.14.0" />
     <PackageReference Include="Ookii.Dialogs.WinForms" Version="1.1.0" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
@@ -48,9 +49,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Reference Include="Guna.UI2">
-      <HintPath>..\lib\Guna\Guna.UI2.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Design" />
     <Reference Include="System.Management" />
